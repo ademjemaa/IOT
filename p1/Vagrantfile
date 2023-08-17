@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "abarbourS" do |abarbour|
+    abarbour.vm.box = "centos/8"
+    abarbour.vm.hostname = "abarbourS"
+    abarbour.vm.network "private_network", ip: "192.168.42.110", virtualbox__intnet: "eth1"
+    abarbour.vm.provider "virtualbox" do |vb|
+      vb.name = "abarbourS"
+	    vb.memory = "1024"
+      vb.cpus = "1"
+    end
+   abarbour.vm.provision "shell", path: "scripts/k3s-install-server.sh"
+  end
+
+  config.vm.define "abarbourSW" do |abarbour_worker|
+    abarbour_worker.vm.box = "centos/8"
+    abarbour_worker.vm.hostname = "abarbourSW"
+    abarbour_worker.vm.network "private_network", ip: "192.168.42.111", virtualbox__intnet: "eth1"
+    abarbour_worker.vm.provider "virtualbox" do |vb|
+      vb.name = "abarbourSW"
+	    vb.memory = "1024"
+      vb.cpus = "1"
+  end
+   abarbour_worker.vm.provision "shell", path: "scripts/k3s-install-agent.sh"
+  end
+end
